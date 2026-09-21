@@ -1,0 +1,33 @@
+{
+  "accuracy_cost_of_flips": 0.994,
+  "english_fp16": {
+    "margin_median": 2.889,
+    "margin_p10": 0.546,
+    "model": "english-fp16",
+    "rows": 1990,
+    "share_margin_below_1_logit": 0.1864,
+    "top1": 0.2131
+  },
+  "flip_rate": 0.001,
+  "flips_vs_fp16": 2,
+  "fp16_margin_of_flipped_rows_median": 0.623,
+  "fp16_margin_of_kept_rows_median": 12.068,
+  "ours_fp16": {
+    "margin_median": 12.062,
+    "margin_p10": 8.393,
+    "model": "ours-fp16",
+    "rows": 1990,
+    "share_margin_below_1_logit": 0.006,
+    "top1": 0.993
+  },
+  "ours_int4": {
+    "margin_median": 11.648,
+    "margin_p10": 7.733,
+    "model": "ours-int4-coreml",
+    "rows": 1990,
+    "share_margin_below_1_logit": 0.0065,
+    "top1": 0.994
+  },
+  "sample_rows": 1990,
+  "share_of_flips_with_margin_below_1_logit": 0.5
+}
