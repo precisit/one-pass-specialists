@@ -71,25 +71,31 @@ someone could easily mistake for a statement about the method. It is a statement
 
 ## Core ML export of the released checkpoint (Apple M4, coremltools 9.0)
 
-| Variant | package | CPU top-1 | CPU parity (mismatches) | ANE top-1 | ANE parity (mismatches) |
+| Variant | Package | CPU-only top-1 | CPU-only parity (mismatches) | CPU + NE top-1 | CPU + NE parity (mismatches) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| fp16 | 1.44 MB | 99.28 % | 0.999531 (14) | 99.29 % | 0.999497 (15) |
-| **int8** | **787 KB** | **99.31 %** | 0.999598 (12) | 99.29 % | 0.999564 (13) |
-| int4 | 481 KB | **99.27 %** | 0.998928 (32) | **49.92 %** | 0.496732 (15 017) |
+| fp16 | 1,472 KiB | 99.28 % | 0.999531 (14) | 99.29 % | 0.999497 (15) |
+| **int8** | **787 KiB** | **99.31 %** | 0.999598 (12) | 99.29 % | 0.999564 (13) |
+| int4 | 481 KiB | **99.27 %** | 0.998928 (32) | **49.92 %** | 0.496732 (15 017) |
 
-Scored per compute-unit path on the same 29 839 held-out decisions. **4-bit weights are nearly
-lossless on the CPU path** (32 changed decisions) while **the ANE path for that palettised graph is
-silently wrong** (15 017 changes, and `ANECCompile() FAILED`) — it substitutes a different
-computation rather than rounding the right one, which is why the model's large margins did not help.
-We had only ever scored int4 with `CPU_AND_NE`, so a broken accelerator path looked like a broken
-quantiser; the earlier claim that int4 "destroys the model" is corrected here and in the model card.
-int8 ships because it is identical to fp16 on **both** paths. The follow-up investigation — including
-why the English conversion's int4 *does* work on the ANE — is noted in the vault and reproducible
-with `int4_compute_units.py` in this directory.
+Scored on all 29,839 held-out decisions. The CPU + NE column uses
+`CPU_AND_NE`, which permits CPU and Neural Engine but does not establish actual
+operation placement. Int4 retains 99.27% accuracy on CPU and fails substantially
+under the other setting. This is not evidence that 4-bit weights alone destroy
+the model. Int8 and float16 have similar accuracy, not identical predictions.
+Package sizes sum file bytes; one KiB is 1,024 bytes, not resident model memory.
 
-Nothing is exported before two proofs: the export-forward rewrite is bit-identical to the
-checkpoint, and the traced graph reproduces it on real rows (argmax agreement 1.0 over 512 rows,
-maximum softmax-probability difference 1.0e-6). A conversion that changes a decision aborts the run.
+A second check on an M1 Max (512 sampled decisions) reproduces the discrepancy.
+Expanding the int4 weights into ordinary float constants does not repair it.
+The exact compiler/runtime mechanism is still unknown. The earlier margin
+analysis used CPU-only predictions and does not explain the failing accelerated
+configuration. See [the evidence, corrections and next tests](COREML-EXECUTION.md)
+and [portable probe](probe_coreml.py).
+
+Before conversion, the export-friendly eager implementation is compared with its
+trace on 512 rows (recorded argmax agreement 1.0 and maximum probability difference
+1.0e-6). This does not prove bit-identical equivalence of the rewritten forward
+implementation to the original checkpoint. Post-conversion parity is measured
+separately against PyTorch.
 
 ## Changelog
 
