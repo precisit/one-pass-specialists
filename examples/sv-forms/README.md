@@ -48,7 +48,7 @@ python -m onepass.evaluate --checkpoint runs/sv-tinyx/model --out RESULTS-pytorc
 | Held-out synthetic test (form-disjoint) | 29 839 | **99.29 %** | 47.36 % | 0.0014 | **1** |
 | Hand-written out-of-distribution demo | 50 | **100.00 %** | 64.00 % | — | 0 |
 | Shuffled-context control (same test rows) | 29 839 | 31.99 % | 47.36 % | — | — |
-| The same *earlier* checkpoint on Swedish rows: the released English model | 2 310 | 21.4 % | 48.87 % | — | 371 of 1 044 fills |
+| The same *earlier* checkpoint on Swedish rows: the released English model | 29 839 | **20.75 %** | 47.36 % | — | 5 412 of 13 844 fills |
 
 The shuffled control is the number to read first: rotating contexts between rows collapses the
 model below the majority baseline, so the score comes from reading the element label and the

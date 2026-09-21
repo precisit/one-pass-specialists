@@ -1,0 +1,147 @@
+{
+  "datasets": {
+    "handwritten_demo": "data/sv-10000/demo-handwritten.jsonl",
+    "synthetic_test": "data/sv-10000/test.jsonl"
+  },
+  "device": "mps",
+  "specialist": {
+    "checkpoint": "/tmp/cua1ckpt/cua-s1-forms.safetensors",
+    "checkpoint_bytes": 2828784,
+    "config": {
+      "context_tokens": 224,
+      "encoder": "tinyx",
+      "heads": 4,
+      "hf_model": "Qwen/Qwen2.5-0.5B",
+      "layers": 2,
+      "option_tokens": 96,
+      "rank": 128,
+      "width": 128
+    },
+    "handwritten_demo": {
+      "action_mix": {
+        "check": 3,
+        "click": 3,
+        "fill": 32,
+        "skip": 12
+      },
+      "ece": 0.660977,
+      "examples": 50,
+      "majority_baseline": 0.64,
+      "per_action": {
+        "check": {
+          "acc": 0.66667,
+          "n": 3
+        },
+        "click": {
+          "acc": 0.33333,
+          "n": 3
+        },
+        "fill": {
+          "acc": 0.15625,
+          "n": 32
+        },
+        "skip": {
+          "acc": 0.16667,
+          "n": 12
+        }
+      },
+      "skipped_when_fill_expected": 16,
+      "top1": 0.2
+    },
+    "handwritten_demo__shuffled_context": {
+      "action_mix": {
+        "check": 3,
+        "click": 3,
+        "fill": 32,
+        "skip": 12
+      },
+      "ece": 0.760258,
+      "examples": 50,
+      "majority_baseline": 0.64,
+      "per_action": {
+        "check": {
+          "acc": 0.66667,
+          "n": 3
+        },
+        "click": {
+          "acc": 0.0,
+          "n": 3
+        },
+        "fill": {
+          "acc": 0.0,
+          "n": 32
+        },
+        "skip": {
+          "acc": 0.25,
+          "n": 12
+        }
+      },
+      "skipped_when_fill_expected": 13,
+      "top1": 0.1
+    },
+    "label": "english-reference",
+    "synthetic_test": {
+      "action_mix": {
+        "check": 855,
+        "click": 1009,
+        "fill": 13844,
+        "skip": 14131
+      },
+      "ece": 0.643213,
+      "examples": 29839,
+      "majority_baseline": 0.47357,
+      "per_action": {
+        "check": {
+          "acc": 0.92164,
+          "n": 855
+        },
+        "click": {
+          "acc": 0.222,
+          "n": 1009
+        },
+        "fill": {
+          "acc": 0.05627,
+          "n": 13844
+        },
+        "skip": {
+          "acc": 0.31137,
+          "n": 14131
+        }
+      },
+      "skipped_when_fill_expected": 5412,
+      "top1": 0.20748
+    },
+    "synthetic_test__shuffled_context": {
+      "action_mix": {
+        "check": 855,
+        "click": 1009,
+        "fill": 13844,
+        "skip": 14131
+      },
+      "ece": 0.682717,
+      "examples": 29839,
+      "majority_baseline": 0.47357,
+      "per_action": {
+        "check": {
+          "acc": 0.54386,
+          "n": 855
+        },
+        "click": {
+          "acc": 0.07433,
+          "n": 1009
+        },
+        "fill": {
+          "acc": 0.01271,
+          "n": 13844
+        },
+        "skip": {
+          "acc": 0.30401,
+          "n": 14131
+        }
+      },
+      "skipped_when_fill_expected": 5196,
+      "top1": 0.16797
+    },
+    "trainable_params": 706048
+  }
+}
