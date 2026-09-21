@@ -92,20 +92,53 @@ def real_batch(path: Path, max_options: int, rows: int = 64) -> tuple[torch.Tens
     return context_ids, option_ids, option_mask
 
 
-def verify_trace(model: torch.nn.Module, traced: torch.jit.ScriptModule, test_rows: Path, max_options: int) -> dict:
-    """The traced export graph must reproduce the model's logits on real rows."""
-    context_ids, option_ids, option_mask = real_batch(test_rows, max_options)
+def verify_trace(
+    model: torch.nn.Module,
+    traced: torch.jit.ScriptModule,
+    test_rows: Path,
+    max_options: int,
+    rows: int = 512,
+    logit_tolerance: float = 1e-4,
+) -> dict:
+    """The traced export graph must reproduce the model's decisions on real rows.
+
+    Two checks, in order of importance:
+
+    1. **argmax agreement must be exactly 1.0** over a sample of real rows (default 512) — a
+       conversion that changes a decision is a different model.
+    2. logits must agree within `logit_tolerance` (absolute, on raw logits). Replaying the same
+       arithmetic through a traced graph can reorder fp32 reductions, so a few 1e-6..1e-5
+       differences are expected and do not indicate an error; the tolerance is here to catch a
+       *wrong* graph, not to police floating point. The maximum softmax-probability difference
+       is reported alongside, because that is the quantity a consumer actually sees.
+    """
+    context_ids, option_ids, option_mask = real_batch(test_rows, max_options, rows=rows)
     wrapper = ExportWrapper(model.eval())
     traced = traced.eval()
     with torch.no_grad():
-        expected = wrapper(context_ids, option_ids, option_mask)
-        actual = traced(context_ids, option_ids, option_mask)
-    difference = (expected - actual).abs().max().item()
-    agreement = float((expected.argmax(-1) == actual.argmax(-1)).float().mean())
-    print(json.dumps({"trace_max_abs_logit_difference": difference, "trace_argmax_agreement": agreement}), flush=True)
-    if agreement != 1.0 or difference > 1e-5:
-        raise SystemExit("traced graph does not match the model; aborting export")
-    return {"max_abs_logit_difference": difference, "argmax_agreement": agreement}
+        expected_logits = wrapper(context_ids, option_ids, option_mask)
+        actual_logits = traced(context_ids, option_ids, option_mask)
+        expected = expected_logits.softmax(-1)
+        actual = actual_logits.softmax(-1)
+
+    difference = (expected_logits - actual_logits).abs().max().item()
+    probability_difference = (expected - actual).abs().max().item()
+    agreement = float((expected_logits.argmax(-1) == actual_logits.argmax(-1)).float().mean())
+    summary = {
+        "verify_rows": int(context_ids.shape[0]),
+        "trace_max_abs_logit_difference": difference,
+        "trace_max_abs_probability_difference": probability_difference,
+        "trace_argmax_agreement": agreement,
+        "logit_tolerance": logit_tolerance,
+    }
+    print(json.dumps(summary), flush=True)
+    if agreement != 1.0:
+        raise SystemExit(f"traced graph changes decisions ({agreement:.6f} agreement); aborting export")
+    if difference > logit_tolerance:
+        raise SystemExit(
+            f"traced graph deviates by {difference:.3e} logits (> {logit_tolerance:g}); aborting export"
+        )
+    return summary
 
 
 def build_fp16(

@@ -1,5 +1,5 @@
 {
-  "episodes": 900,
+  "episodes": 10000,
   "format": "cua-s1-choice-jsonl",
   "format_version": 1,
   "generator": {
@@ -23,22 +23,22 @@
   "seed": 2026,
   "splits": {
     "test": {
-      "episodes": 79,
+      "episodes": 1009,
       "file": "test.jsonl",
-      "rows": 2315,
-      "sha256": "92c0dfec00239b6e1d5cc6db4f098d12fc90bc5a8832428d9df0f6aea380d272"
+      "rows": 29839,
+      "sha256": "105b7c0509af8667c11653f77d3866dc528e846a3f439e284dccb62164d2dc3f"
     },
     "train": {
-      "episodes": 725,
+      "episodes": 7984,
       "file": "train.jsonl",
-      "rows": 21306,
-      "sha256": "b3a7ef25e4edb47b18be2601d1060a3589c7ed8563397fab25e27088017ee3fa"
+      "rows": 234921,
+      "sha256": "071edb46d1a5f03a4b85e4ca5adfc2a089b31b334c85c3446e0f75d378dae731"
     },
     "validation": {
-      "episodes": 96,
+      "episodes": 1007,
       "file": "validation.jsonl",
-      "rows": 2855,
-      "sha256": "09298b6319b8471379b8f9e87f983558f5fa194b38271eac195670a8eb2ef5f1"
+      "rows": 29649,
+      "sha256": "e58cf782a94deb6532675bc0de202819c75f8f347912dfddf9337dd4a0992baa"
     }
   }
 }
