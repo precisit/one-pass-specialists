@@ -1,0 +1,44 @@
+{
+  "episodes": 900,
+  "format": "cua-s1-choice-jsonl",
+  "format_version": 1,
+  "generator": {
+    "config": {
+      "filled_field_probability": 0.6,
+      "hard_negative_probability": 0.35,
+      "max_distractor_entities": 3,
+      "max_extra_entities": 5,
+      "missing_entity_probability": 0.12,
+      "partial_form_probability": 0.3,
+      "stale_value_probability": 0.05
+    },
+    "format": "spike.sv_synth",
+    "task_line": "UPPGIFT fyll i formul\u00e4ret fr\u00e5n dokumentet och skicka sedan in"
+  },
+  "ratios": {
+    "test": 0.1,
+    "train": 0.8,
+    "validation": 0.1
+  },
+  "seed": 2026,
+  "splits": {
+    "test": {
+      "episodes": 79,
+      "file": "test.jsonl",
+      "rows": 2315,
+      "sha256": "92c0dfec00239b6e1d5cc6db4f098d12fc90bc5a8832428d9df0f6aea380d272"
+    },
+    "train": {
+      "episodes": 725,
+      "file": "train.jsonl",
+      "rows": 21306,
+      "sha256": "b3a7ef25e4edb47b18be2601d1060a3589c7ed8563397fab25e27088017ee3fa"
+    },
+    "validation": {
+      "episodes": 96,
+      "file": "validation.jsonl",
+      "rows": 2855,
+      "sha256": "09298b6319b8471379b8f9e87f983558f5fa194b38271eac195670a8eb2ef5f1"
+    }
+  }
+}

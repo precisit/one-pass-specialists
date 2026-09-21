@@ -1,0 +1,18 @@
+# generated corpora, checkpoints and exports are not source
+data/
+runs/
+sv-coreml/
+*.safetensors
+*.jsonl
+RESULTS-*.json
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+*.egg-info/
+.DS_Store
+
+# ...except the small example set, which is documentation
+!examples/**/*.jsonl
