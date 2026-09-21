@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "onepass"
+version = "0.1.0"
+description = "Train small one-pass option scorers (Jev/System One-shaped specialists) from synthetic data and export them to Core ML"
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+train = ["torch>=2.2", "safetensors>=0.4"]
+coreml = ["coremltools>=9.0", "scikit-learn>=1.3"]
+dev = ["pytest>=8"]
+
+[tool.setuptools]
+packages = ["onepass"]
