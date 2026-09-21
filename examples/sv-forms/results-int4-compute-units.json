@@ -1,0 +1,36 @@
+{
+  "pytorch_top1": 0.9929,
+  "rows": 29839,
+  "table": {
+    "fp16__ane": {
+      "mismatches": 15,
+      "parity_with_torch": 0.999497,
+      "top1": 0.9929
+    },
+    "fp16__cpu": {
+      "mismatches": 14,
+      "parity_with_torch": 0.999531,
+      "top1": 0.9928
+    },
+    "int4__ane": {
+      "mismatches": 15017,
+      "parity_with_torch": 0.496732,
+      "top1": 0.4992
+    },
+    "int4__cpu": {
+      "mismatches": 32,
+      "parity_with_torch": 0.998928,
+      "top1": 0.9927
+    },
+    "int8__ane": {
+      "mismatches": 13,
+      "parity_with_torch": 0.999564,
+      "top1": 0.9929
+    },
+    "int8__cpu": {
+      "mismatches": 12,
+      "parity_with_torch": 0.999598,
+      "top1": 0.9931
+    }
+  }
+}

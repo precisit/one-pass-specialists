@@ -71,19 +71,21 @@ someone could easily mistake for a statement about the method. It is a statement
 
 ## Core ML export of the released checkpoint (Apple M4, coremltools 9.0)
 
-| Variant | package | top-1 (29 839 rows) | argmax parity vs PyTorch | median | p95 |
+| Variant | package | CPU top-1 | CPU parity (mismatches) | ANE top-1 | ANE parity (mismatches) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| fp16, CPU + ANE | 1.44 MB | 99.29 % | 0.99950 (15) | 1.314 ms | 1.412 ms |
-| fp16, CPU only | 1.44 MB | 99.28 % | — | 1.727 ms | 1.929 ms |
-| **int8, CPU + ANE** | **787 KB** | **99.29 %** | 0.99956 (13) | 1.314 ms | 1.411 ms |
-| int4, CPU + ANE | 481 KB | **49.92 %** | 0.49675 (15 015) | 1.984 ms | 2.115 ms |
+| fp16 | 1.44 MB | 99.28 % | 0.999531 (14) | 99.29 % | 0.999497 (15) |
+| **int8** | **787 KB** | **99.31 %** | 0.999598 (12) | 99.29 % | 0.999564 (13) |
+| int4 | 481 KB | **99.27 %** | 0.998928 (32) | **49.92 %** | 0.496732 (15 017) |
 
-**int4 does not work for this checkpoint** (and its graph fails ANE compilation); it is published as
-evidence. Note the falsified assumption: we first thought quantisation headroom tracked how well
-trained the model was, because Cua's converged English checkpoint tolerated the same palettisation
-at a cost of 0.06 pp. The well-trained 10 000-episode checkpoint collapses just like the
-undertrained one, so that explanation is wrong and we say so. int8, meanwhile, is free: 787 KB,
-same accuracy, same tail latency.
+Scored per compute-unit path on the same 29 839 held-out decisions. **4-bit weights are nearly
+lossless on the CPU path** (32 changed decisions) while **the ANE path for that palettised graph is
+silently wrong** (15 017 changes, and `ANECCompile() FAILED`) — it substitutes a different
+computation rather than rounding the right one, which is why the model's large margins did not help.
+We had only ever scored int4 with `CPU_AND_NE`, so a broken accelerator path looked like a broken
+quantiser; the earlier claim that int4 "destroys the model" is corrected here and in the model card.
+int8 ships because it is identical to fp16 on **both** paths. The follow-up investigation — including
+why the English conversion's int4 *does* work on the ANE — is noted in the vault and reproducible
+with `int4_compute_units.py` in this directory.
 
 Nothing is exported before two proofs: the export-forward rewrite is bit-identical to the
 checkpoint, and the traced graph reproduces it on real rows (argmax agreement 1.0 over 512 rows,
