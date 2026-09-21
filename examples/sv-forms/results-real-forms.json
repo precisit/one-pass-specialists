@@ -1,0 +1,94 @@
+{
+  "kanslist": {
+    "examples": 195,
+    "per_action": {
+      "check": 0.37,
+      "click": 1.0,
+      "fill": 0.123,
+      "skip": 0.816
+    },
+    "per_field": {
+      "chat": "4/15",
+      "comment": "8/15",
+      "consent": "10/15",
+      "documents": "7/15",
+      "email": "12/15",
+      "emailProvider": "8/15",
+      "propertyManager": "8/15",
+      "role": "4/15",
+      "submit": "5/15",
+      "units": "9/15",
+      "wantsContact": "7/15",
+      "wantsNewsletter": "6/15",
+      "website": "15/15"
+    },
+    "silent_skip_rate_of_fills": 0.8769230769230769,
+    "silent_skips": 57,
+    "top1": 0.5282051282051282
+  },
+  "kanslist__shuffled_context": {
+    "examples": 195,
+    "per_action": {
+      "check": 0.111,
+      "click": 0.2,
+      "fill": 0.0,
+      "skip": 0.796
+    },
+    "per_field": {
+      "chat": "4/15",
+      "comment": "7/15",
+      "consent": "4/15",
+      "documents": "4/15",
+      "email": "6/15",
+      "emailProvider": "5/15",
+      "propertyManager": "5/15",
+      "role": "2/15",
+      "submit": "11/15",
+      "units": "6/15",
+      "wantsContact": "7/15",
+      "wantsNewsletter": "8/15",
+      "website": "13/15"
+    },
+    "silent_skip_rate_of_fills": 0.7538461538461538,
+    "silent_skips": 49,
+    "top1": 0.4205128205128205
+  },
+  "pratsam": {
+    "examples": 75,
+    "per_action": {
+      "check": 0.0,
+      "click": 0.0,
+      "fill": 1.0,
+      "skip": 0.943
+    },
+    "per_field": {
+      "consent": "6/15",
+      "email": "12/15",
+      "signingUpFor": "15/15",
+      "submit": "10/15",
+      "website": "15/15"
+    },
+    "silent_skip_rate_of_fills": 0.0,
+    "silent_skips": 0,
+    "top1": 0.7733333333333333
+  },
+  "pratsam__shuffled_context": {
+    "examples": 75,
+    "per_action": {
+      "check": 0.0,
+      "click": 0.0,
+      "fill": 0.125,
+      "skip": 0.887
+    },
+    "per_field": {
+      "consent": "6/15",
+      "email": "7/15",
+      "signingUpFor": "12/15",
+      "submit": "9/15",
+      "website": "14/15"
+    },
+    "silent_skip_rate_of_fills": 0.875,
+    "silent_skips": 7,
+    "top1": 0.64
+  }
+}
