@@ -19,7 +19,7 @@ held-out decisions. Reported platform: Apple M4, macOS 26.6, coremltools 9.0.
 operation placement. Similar accuracy does not imply identical predictions:
 int8 is not established to be identical to float16 under either setting.
 
-The earlier [timing run](results-coreml.json) excludes three warm-up examples
+The earlier [timing run](https://huggingface.co/precisit/one-pass-sv-forms/blob/778ff920104b36800a9f028521ad958eedcb8b7a/eval/results-coreml.json) excludes three warm-up examples
 and measures 29,836 rows. Keep its denominator and mismatch counts separate.
 
 ## Bounded reproduction on M1 Max
