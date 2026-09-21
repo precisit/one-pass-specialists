@@ -27,7 +27,7 @@ retries and the decision to submit belong in ordinary code around it.
 | `onepass.synth` | Generate episodes (context + options + gold label) from a concept catalogue, split by **form signature** so held-out forms are truly unseen; writes a manifest with per-split SHA-256. |
 | `onepass.train` | Train the vendored upstream trainer on those splits. |
 | `onepass.evaluate` | Score a checkpoint: top-1, per-action accuracy, ECE, a shuffled-context control, and **silent skips** (a required fill answered "skip"). |
-| `onepass.export_coreml` | Export fp16 / int8 / int4 Core ML packages, after proving the export graph is bit-identical to the checkpoint. |
+| `onepass.export_coreml` | Export fp16 / int8 / int4 Core ML packages, checking the export-friendly eager implementation against its traced graph before conversion. |
 | `onepass.coreml_evaluate` | Measure the exported packages against the PyTorch checkpoint: argmax parity, accuracy, and median/p95 latency with and without the Neural Engine. |
 | `onepass.encode` | The byte-input contract shared by both paths (byte + 1, zero padding, fail-closed option ceiling). |
 
@@ -64,18 +64,29 @@ know it is Swedish.
 `examples/sv-forms/` holds the receipts: the training run, both result files and the corpus
 manifest. Headlines from that example:
 
-- **83.02 %** top-1 on held-out, form-disjoint synthetic Swedish rows (majority-class baseline
-  50.45 %), **86 %** on a 50-decision hand-written set, and **21.4 %** for the released
-  *English* checkpoint of the same family on the very same Swedish rows.
-- **7.5 %** of required fills are answered "skip" — a silent failure, which is why the metric
-  exists. Any real integration must verify outcomes outside the model.
-- Core ML: int8 is free (787 KB, 83.09 %, ~1.3 ms median on the Neural Engine), while **int4
-  collapses this checkpoint to 50.87 %** and fails ANE compilation. Quantisation headroom is a
-  property of the training run, not of the architecture — sweep it per checkpoint.
+- The current release scores **99.29%** on 29,839 held-out synthetic decisions;
+  the majority-class baseline is 47.36%. It scores 100% on a small 50-decision
+  handwritten set. The unchanged English checkpoint scores 20.75% on the same
+  Swedish test split, with different labels and action strings from its training.
+- It silently skips **1 of 13,844 expected fills**. This excludes wrong-value
+  fills, so inspect the action breakdown as well as the overall accuracy.
+- The **787 KiB int8** Core ML package scores 99.31% with CPU-only execution and
+  99.29% with CPU and Neural Engine allowed. Similar accuracy is not identical
+  predictions. The earlier M4 timing run measured a 1.314 ms median prediction
+  call under `CPU_AND_NE`, excluding encoding, loading and warm-up.
+- The **481 KiB int4** package scores 99.27% on CPU and 49.92% with `CPU_AND_NE`.
+  A 512-row M1 Max probe reproduces this configuration-dependent discrepancy.
+  Decompressing the rounded weights does not repair it. The exact cause is
+  unresolved; do not attribute it simply to 4-bit precision or claim ANE-only
+  placement. See [the investigation and reproduction](examples/sv-forms/COREML-EXECUTION.md).
 
-Not measured: real forms, real users, non-Swedish catalogues, or any end-to-end workflow. The
-synthetic corpus is synthetic by construction (`.invalid` domains, fictional names, generated
-identifiers that belong to nobody).
+The [fixtures based on our websites](examples/sv-forms/results-real-forms.json)
+score 52.8% (Kanslist, 195 decisions) and 77.3% (Pratsam, 75). These are simplified
+field definitions with synthetic values, not browser tests. Pratsam's radio
+expected-answer logic needs correction; that part of its score is provisional.
+Not measured: real submissions, real users, non-Swedish catalogues or end-to-end
+form completion. Generated values are synthetic; generated identifiers are not
+guaranteed never to coincide with real identifiers.
 
 ## Provenance and licence
 
