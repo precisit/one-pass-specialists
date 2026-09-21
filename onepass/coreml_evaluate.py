@@ -48,13 +48,23 @@ def package_bytes(path: Path) -> int:
     return total
 
 
-def torch_predictions(checkpoint: Path, rows: list[dict]) -> list[int]:
+def torch_predictions(checkpoint: Path, rows: list[dict], batch_size: int = 512) -> list[int]:
+    """Predictions for the whole split, in chunks.
+
+    Chunking is not an optimisation: materialising a 30 000-row split as a single batch builds
+    ~1 GB of int64 tensors before the model even runs, which is enough to have the process killed
+    on a 24 GB laptop. The held-out splits grow with the corpus, so this has to scale.
+    """
     model, collator, _ = load_checkpoint(checkpoint, "cpu")
     model.eval()
-    examples = [ChoiceExample(context=r["context"], options=tuple(r["options"]), label=r["label"]) for r in rows]
-    batch = collator(examples)
-    with torch.no_grad():
-        return model(batch).argmax(-1).tolist()
+    predictions: list[int] = []
+    for start in range(0, len(rows), batch_size):
+        chunk = rows[start : start + batch_size]
+        examples = [ChoiceExample(context=r["context"], options=tuple(r["options"]), label=r["label"]) for r in chunk]
+        batch = collator(examples)
+        with torch.no_grad():
+            predictions.extend(model(batch).argmax(-1).tolist())
+    return predictions
 
 
 def score(predictions: list[int], rows: list[dict], baseline: list[int] | None = None) -> dict:
