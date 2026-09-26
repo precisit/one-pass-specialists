@@ -1,0 +1,18 @@
+[package]
+name = "c4label"
+version = "0.1.0"
+edition = "2021"
+description = "Batch exact labelling of Connect Four positions (all child scores) on top of connect-four-ai (MIT)."
+license = "MIT"
+publish = false
+
+[dependencies]
+# Pinned to the commit audited on 2026-09-26. MIT. Not Pascal Pons' AGPL solver.
+connect-four-ai = { git = "https://github.com/benjaminrall/connect-four-ai", rev = "28a112adaf3ff89ee23fb09411fa592b6597010e" }
+rayon = "1.10"
+rand = "0.9"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1

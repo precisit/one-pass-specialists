@@ -10,6 +10,11 @@ The worked example is **[One-Pass SV-Forms (SV0)](https://huggingface.co/precisi
 a Swedish form specialist trained from a Swedish synthetic corpus on one laptop. The recipe,
 the numbers and the failures are all in [`examples/sv-forms/`](examples/sv-forms/).
 
+A second worked example, **[onepass-c4](https://huggingface.co/precisit/onepass-c4)**, uses the same
+model to play Connect Four in the browser — context = the board, options = the legal columns — trained
+on positions labelled by an exact solver: [`examples/c4/`](examples/c4/)
+([play it](https://precisit.github.io/onepass-web/demo/c4/)).
+
 ## Why this shape of model
 
 A language model that *writes* an answer has to be trusted, budgeted for and served. A model
