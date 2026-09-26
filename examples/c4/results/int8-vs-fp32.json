@@ -1,0 +1,40 @@
+{
+ "what": "fp32 vs int8 ONNX, position by position, on the frozen eval set",
+ "positions": 17325,
+ "same_column": 0.9815,
+ "different_column": 321,
+ "fp32_gap_between_top_two_scores_where_different": {
+  "median": 0.0044,
+  "max": 0.1156
+ },
+ "different_choices_that_change_value_preservation": 13,
+ "value_preserving_rate": {
+  "fp32": 0.9872,
+  "int8": 0.9872
+ },
+ "exact_top1": {
+  "fp32": 0.9348,
+  "int8": 0.9347
+ },
+ "max_abs_score_difference": {
+  "median": 0.0335,
+  "p99": 0.2583,
+  "max": 0.7559
+ },
+ "files": {
+  "fp32": {
+   "name": "onepass-c4-v2.onnx",
+   "sha256": "532c63f0d34c2d8c45bc0c424605567bf0cecc7c9a87f01b9b055c86b82d0638"
+  },
+  "int8": {
+   "name": "onepass-c4-v2-int8.onnx",
+   "sha256": "015523d297c8e4cce067428f3dbef0847d51d9008adbf7eeca8e35948d93e4a9"
+  }
+ },
+ "machine": {
+  "cpu": "Apple M1 Max",
+  "onnxruntime": "1.30.0",
+  "provider": "CPUExecutionProvider"
+ },
+ "note": "Integer kernels can break near-ties differently on other CPUs; expect small differences in the counts there."
+}

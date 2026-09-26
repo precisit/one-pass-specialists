@@ -33,8 +33,8 @@ def parse_line(line: str) -> tuple[str, int, Scores | str, int]:
     return key, int(ply), scores, int(micros)
 
 
-def label_batch(lines: list[str], threads: int | None = None, book: bool = True) -> list[tuple]:
-    args = [str(BINARY)]
+def label_batch(lines: list[str], threads: int | None = None, book: bool = True, fresh: bool = False) -> list[tuple]:
+    args = [str(BINARY)] + (["--fresh"] if fresh else [])
     if threads:
         args += ["--threads", str(threads)]
     if not book:
