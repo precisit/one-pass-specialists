@@ -3,6 +3,9 @@
 The model is published as [`precisit/onepass-c4`](https://huggingface.co/precisit/onepass-c4) (v2, MIT)
 and playable at [precisit.github.io/onepass-web/demo/c4](https://precisit.github.io/onepass-web/demo/c4/).
 
+Read the story of the first attempt, the better teacher and the browser model:
+[Meet your one-pass AI opponent](https://precisit.com/en/blog/onepass-connect-four/).
+
 A one-pass specialist gets a context and a list of options and returns one score per option in a
 single forward pass. Here the context is the board (44 bytes) and the options are the legal columns
 (`column 1` … `column 7`); the model plays the highest score. **No search, no rules** — the model is
