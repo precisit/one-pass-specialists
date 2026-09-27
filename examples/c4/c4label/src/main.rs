@@ -14,6 +14,8 @@
 //! `--threads N` sets the worker count (default: all cores). `--serve` answers line by line with a
 //! flush after each (for interactive players); otherwise lines are processed in parallel chunks.
 //! `--no-book` disables the embedded depth-8 opening book (for verifying the book itself).
+//! `--fresh` clears the solver's transposition table before every input line (outside the timed
+//! part), so each position is timed cold instead of benefiting from unrelated earlier positions.
 //! `--value` outputs the position's own score (`solve`, which consults the opening book first)
 //! instead of the seven child scores: `input  ply  value  micros`.
 //!
@@ -198,6 +200,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
     let serve = args.iter().any(|a| a == "--serve");
     let value_mode = args.iter().any(|a| a == "--value");
+    let fresh = args.iter().any(|a| a == "--fresh");
     let book = !args.iter().any(|a| a == "--no-book");
     if let Some(i) = args.iter().position(|a| a == "--threads") {
         let n: usize = args.get(i + 1).and_then(|v| v.parse().ok()).expect("--threads N");
@@ -243,7 +246,10 @@ fn main() {
         }
         let results: Vec<String> = chunk
             .par_iter()
-            .map_init(|| make_solver(book), |solver, line| if value_mode { value(solver, line) } else { label(solver, line) })
+            .map_init(|| make_solver(book), |solver, line| {
+                if fresh { solver.reset(); }
+                if value_mode { value(solver, line) } else { label(solver, line) }
+            })
             .collect();
         for r in results {
             writeln!(out, "{r}").unwrap();

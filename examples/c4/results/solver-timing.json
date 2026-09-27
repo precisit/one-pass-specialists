@@ -1,0 +1,62 @@
+{
+ "what": "time for the exact solver (connect-four-ai via c4label) to score every legal column of one position",
+ "sets": {
+  "pons/end-easy": {
+   "positions": 1000,
+   "mean_ms": 0.011,
+   "median_ms": 0.001,
+   "p95_ms": 0.044,
+   "max_ms": 1.328
+  },
+  "pons/middle-easy": {
+   "positions": 1000,
+   "mean_ms": 0.836,
+   "median_ms": 0.024,
+   "p95_ms": 3.632,
+   "max_ms": 94.657
+  },
+  "pons/middle-medium": {
+   "positions": 1000,
+   "mean_ms": 4.349,
+   "median_ms": 0.98,
+   "p95_ms": 21.509,
+   "max_ms": 117.955
+  },
+  "pons/begin-easy": {
+   "positions": 1000,
+   "mean_ms": 68.418,
+   "median_ms": 4.315,
+   "p95_ms": 326.484,
+   "max_ms": 2959.163
+  },
+  "pons/begin-medium": {
+   "positions": 1000,
+   "mean_ms": 190.627,
+   "median_ms": 48.078,
+   "p95_ms": 822.307,
+   "max_ms": 4094.999
+  },
+  "pons/begin-hard": {
+   "positions": 1000,
+   "mean_ms": 241.879,
+   "median_ms": 0.0,
+   "p95_ms": 1258.995,
+   "max_ms": 7837.015
+  },
+  "uci-8-ply-sample": {
+   "positions": 200,
+   "mean_ms": 1452.264,
+   "median_ms": 839.33,
+   "p95_ms": 4854.392,
+   "max_ms": 16572.782
+  }
+ },
+ "machine": {
+  "cpu": "Apple M5 Pro",
+  "cores": 18,
+  "positions_in_parallel": 8,
+  "solver": "connect-four-ai @ 28a112a (MIT), embedded depth-8 opening book, native build",
+  "transposition_table": "cleared before every position (cold)"
+ },
+ "wall_s": 106.6
+}

@@ -127,6 +127,8 @@ steps × 1 024 positions).
 | `eval_c4.py`, `protocol.py` | the frozen eval set, move-level metrics and controls; the game protocol |
 | `dagger.py` | one DAgger round: student games against a pool, every visited position labelled |
 | `export_c4.py` | ONNX export with argmax and cross-shape parity gates; browser self-test rows |
+| `compare_int8.py` | fp32 vs int8 ONNX, position by position (receipt: `results/int8-vs-fp32.json`) |
+| `time_solver.py` | how long the exact solver takes to choose a move, on public reference positions (receipt: `results/solver-timing.json`) |
 | `engine.py` | board and the hand-written depth-limited bots used as opponents |
 | `results/` | the protocol and every measurement as JSON |
 
